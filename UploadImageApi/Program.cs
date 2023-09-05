@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ImageDbContext>(
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 var app = builder.Build();
 
