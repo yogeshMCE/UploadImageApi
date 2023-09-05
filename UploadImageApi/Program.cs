@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Net.NetworkInformation;
 using UploadImageApi.Data;
+using UploadImageApi.Mappings;
 using UploadImageApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ImageDbContext>(
        options => options.UseSqlServer(builder.Configuration.GetConnectionString("ImageUploadApiConnectionString")));
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -30,11 +32,11 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
-    RequestPath= "/Images"
-}) ;
+//app.UseStaticFiles(new StaticFileOptions
+//{
+    //FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+  //  RequestPath= "/Images"
+//}) ;
 app.MapControllers();
 
 app.Run();

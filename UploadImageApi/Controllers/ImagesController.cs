@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UploadImageApi.Models.Domain;
 using UploadImageApi.Models.DTOs;
@@ -11,10 +12,12 @@ namespace UploadImageApi.Controllers
     public class ImagesController : ControllerBase
     {
         private readonly IImageRepository imageRepository;
+        private readonly IMapper mapper;
 
-        public ImagesController( IImageRepository imageRepository)
+        public ImagesController( IImageRepository imageRepository, IMapper mapper)
         {
             this.imageRepository = imageRepository;
+            this.mapper = mapper;
         }
         [HttpPost]
         [Route("upload")]
@@ -34,7 +37,8 @@ namespace UploadImageApi.Controllers
                     FileDescription=request.FileDescription,
                 };
                 await imageRepository.UploadImageAsync(ImageDomainModel);
-                return Ok(ImageDomainModel);
+
+                return Ok(mapper.Map<ImageDto>(ImageDomainModel));
             }
             return BadRequest(ModelState);
         }
